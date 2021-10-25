@@ -1,6 +1,5 @@
 from model.project import Project
 from suds.client import Client
-from suds.wsdl import Port
 
 
 class SoapHelper:
@@ -8,8 +7,8 @@ class SoapHelper:
         self.app = app
 
     def get_project_list(self):
-        client = Client("%s/api/soap/mantisconnect.php?wsdl" %
-                        self.app.base_url)
+        client = Client("%s%s" %
+                        (self.app.base_url, self.app.soap_url))
         projects = client.service.mc_projects_get_user_accessible(
             self.app.credentials.login, self.app.credentials.password)
 
