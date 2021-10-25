@@ -1,8 +1,10 @@
 import json
-import pytest
-from fixture.application import Application
 import os.path
 
+import pytest
+
+from fixture.application import Application
+from model.credentials import Credentials
 
 fixture = None
 target = None
@@ -26,7 +28,9 @@ def app(request):
     web_config_for_login = load_config(
         request.config.getoption("--target"))["webadmin"]
     if fixture is None or not fixture.is_valid():
-        fixture = Application(browser=browser, base_url=web_config["baseUrl"])
+        fixture = Application(browser=browser, base_url=web_config["baseUrl"], credentials=Credentials(
+            login=web_config_for_login["username"], password=web_config_for_login["password"]))
+
         fixture.session.ensure_login(username=web_config_for_login["username"],
                                      password=web_config_for_login["password"])
     return fixture

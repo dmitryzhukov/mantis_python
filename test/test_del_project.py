@@ -7,7 +7,7 @@ from model.project import Project
 
 
 def test_delete_project(app: Application):
-    old_projects = app.project.get_project_list()
+    old_projects = app.soap.get_project_list()
 
     if (len(old_projects) == 0):
         project = Project(name=random_string("project_name", 10),
@@ -15,13 +15,13 @@ def test_delete_project(app: Application):
         app.project.add_project(project)
         old_projects = app.project.get_project_list()
 
-    index = random.randrange(len(old_projects))
+    project_to_delete = random.choice(old_projects)
 
-    app.project.del_project_by_index(index)
-    old_projects[index:index + 1] = []
+    app.project.del_project_by_id(project_to_delete.id)
+    old_projects.remove(project_to_delete)
 
     time.sleep(1)
-    new_projects = app.project.get_project_list()
+    new_projects = app.soap.get_project_list()
 
     assert sorted(old_projects, key=Project.sort_by_name) == sorted(
         new_projects, key=Project.sort_by_name)

@@ -1,4 +1,5 @@
 from typing import List
+
 from model.project import Project
 
 
@@ -57,6 +58,16 @@ class ProjectHelper:
         row = wd.find_elements_by_css_selector(
             ".widget-box:nth-of-type(2) tbody tr")[index]
         row.find_elements_by_css_selector("td a")[0].click()
+        wd.find_element_by_css_selector(
+            "#project-delete-form input[type='submit']").click()
+        wd.find_element_by_css_selector(
+            "form input[type='submit']").click()
+
+    def del_project_by_id(self, id):
+        wd = self.app.wd
+        self.open_manage_project_page()
+        wd.find_element_by_css_selector(
+            "a[href='manage_proj_edit_page.php?project_id=%s']" % id).click()
         wd.find_element_by_css_selector(
             "#project-delete-form input[type='submit']").click()
         wd.find_element_by_css_selector(
